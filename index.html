@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,11 +13,23 @@
             overflow: hidden;
             animation: bgScroll 5s linear infinite;
             height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
+
         @keyframes bgScroll {
-            from { background-position: 0 0; }
-            to { background-position: -800px 0; }
+            from {
+                background-position: 0 0;
+            }
+
+            to {
+                background-position: -800px 0;
+            }
         }
+        
+
         canvas {
             display: block;
             margin: 20px auto;
@@ -29,53 +42,73 @@
             border-radius: 5px;
             background-repeat: no-repeat;
             background-position: bottom;
+            padding: 8px;
+        }
+
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        #restartBtn {
+            display: none;
         }
         button {
-            display: none;
             padding: 10px 20px;
             font-size: 16px;
             margin-top: 10px;
             margin: 0 auto;
         }
+
         #gameOverText {
             display: none;
             font-size: 24px;
             font-weight: bold;
             color: red;
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.7);
             padding: 20px;
             border-radius: 10px;
         }
+
         @media (max-width: 600px) {
             #gameOverText {
-                font-size: 18px;
-                top: 25%;
+                font-size: 18px
             }
         }
     </style>
 </head>
+
 <body>
-    <h1>Mafia Hasina Game</h1>
-    <canvas id="gameCanvas"></canvas>
-    <div id="gameOverText">Game Over! Score: <span id="finalScore"></span></div>
-    <button id="restartBtn">Restart Game</button>
-    <audio id="jumpSound" src="img/jump.mp3"></audio>
-    <audio id="gameOverSound" src="img/game-over.mp3"></audio>
-    <audio id="gameBGAudio" src="img/audio.mp3"></audio>
+    <section class="game-container">
+        <h1>Mafia Hasina Game</h1>
+        <canvas id="gameCanvas"></canvas>
+        <div class="game-over">
+            <div id="gameOverText">Game Over! Score: <span id="finalScore"></span></div>
+            <button id="restartBtn">Restart Game</button>
+            <button id="startBtn">Start Game</button>
+        </div>
+        <audio id="jumpSound" src="img/jump.mp3"></audio>
+        <audio id="gameOverSound" src="img/game-over.mp3"></audio>
+        <audio id="gameBGAudio" src="img/audio.mp3"></audio>
+    </section>
+
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
+        const startBtn = document.getElementById("startBtn");
         const restartBtn = document.getElementById("restartBtn");
+        const gameOverSection = document.querySelector(".game-over");
         const gameOverText = document.getElementById("gameOverText");
         const finalScoreText = document.getElementById("finalScore");
         const jumpSound = document.getElementById("jumpSound");
         const gameOverSound = document.getElementById("gameOverSound");
         const gameBGAudio = document.getElementById("gameBGAudio");
-        gameBGAudio.volume = 0.2;
+        gameBGAudio.volume = 0.4;
 
         function resizeCanvas() {
             canvas.width = Math.min(window.innerWidth * 0.9, 1000);
@@ -98,11 +131,11 @@
         let obstacles = [];
         let gameSpeed = 4;
         let score = 0;
-        let gameOver = false;
+        let gameOver = true;
 
         function jump() {
             if (!dino.jumping) {
-                dino.velocityY = -18;
+                dino.velocityY = -17;
                 dino.jumping = true;
                 jumpSound.play().catch(error => console.error("Jump sound failed:", error));
             }
@@ -137,10 +170,13 @@
                     dino.y + dino.height > obstacles[i].y
                 ) {
                     gameOver = true;
+                    gameOverSound.play();
                     gameBGAudio.pause();
                     gameOverText.style.display = "block";
+                    gameOverSection.style.display = "block";
                     finalScoreText.textContent = score;
                     restartBtn.style.display = "block";
+                    startBtn.style.display = "none";
                 }
             }
 
@@ -159,7 +195,7 @@
         }
 
         function gameLoop() {
-            gameBGAudio.play().catch(error => console.error("Background audio failed:", error));
+            gameBGAudio.play();
             update();
             draw();
             if (!gameOver) requestAnimationFrame(gameLoop);
@@ -167,19 +203,26 @@
 
         restartBtn.addEventListener("click", () => {
             gameOver = false;
-            gameOverSound.play();
             dino.y = 200;
             dino.velocityY = 0;
             obstacles = [];
             score = 0;
             gameSpeed = 4;
-            restartBtn.style.display = "none";
-            gameOverText.style.display = "none";
+            gameOverSection.style.display = "none";
             gameLoop();
         });
-        
-        
-        gameLoop();
+
+        startBtn.addEventListener("click", () => {
+            gameOver = false;
+            dino.y = 200;
+            dino.velocityY = 0;
+            obstacles = [];
+            score = 0;
+            gameSpeed = 4;
+            gameOverSection.style.display = "none";
+            gameLoop();
+        });
     </script>
 </body>
+
 </html>
