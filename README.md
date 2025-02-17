@@ -1,5 +1,7 @@
 # Mafia Hasina Game
 
+[Play the game here!](https://hasina-game.netlify.app)
+
 Mafia Hasina Game is a simple browser-based jumping game where the player controls a character (Hasina) to avoid obstacles (Yunus). The game is built using HTML5 Canvas and JavaScript.
 
 ## Features
