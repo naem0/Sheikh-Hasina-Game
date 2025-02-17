@@ -63,12 +63,19 @@
     <canvas id="gameCanvas"></canvas>
     <div id="gameOverText">Game Over! Score: <span id="finalScore"></span></div>
     <button id="restartBtn">Restart Game</button>
+    <audio id="jumpSound" src="img/jump.mp3"></audio>
+    <audio id="gameOverSound" src="img/game-over.mp3"></audio>
+    <audio id="gameBGAudio" src="img/audio.mp3"></audio>
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         const restartBtn = document.getElementById("restartBtn");
         const gameOverText = document.getElementById("gameOverText");
         const finalScoreText = document.getElementById("finalScore");
+        const jumpSound = document.getElementById("jumpSound");
+        const gameOverSound = document.getElementById("gameOverSound");
+        const gameBGAudio = document.getElementById("gameBGAudio");
+        gameBGAudio.volume = 0.2;
 
         function resizeCanvas() {
             canvas.width = Math.min(window.innerWidth * 0.9, 1000);
@@ -87,16 +94,17 @@
         const dinoImg = loadImage("/img/hasina.png");
         const obstacleImages = ["img/younus.png", "img/younus.png", "img/younus.png"].map(loadImage);
 
-        let dino = { x: 50, y: 280, width: 30, height: 50, velocityY: 0, gravity: 1.5, jumping: false };
+        let dino = { x: 50, y: 280, width: 30, height: 50, velocityY: 0, gravity: 1, jumping: false };
         let obstacles = [];
-        let gameSpeed = 5;
+        let gameSpeed = 4;
         let score = 0;
         let gameOver = false;
 
         function jump() {
             if (!dino.jumping) {
-                dino.velocityY = -20;
+                dino.velocityY = -18;
                 dino.jumping = true;
+                jumpSound.play().catch(error => console.error("Jump sound failed:", error));
             }
         }
 
@@ -115,9 +123,9 @@
                 dino.jumping = false;
             }
 
-            if (obstacles.length === 0 || obstacles[obstacles.length - 1].x < canvas.width - (Math.floor(Math.random() * (4000 - 200 + 1)) + 180)) {
+            if (obstacles.length === 0 || obstacles[obstacles.length - 1].x < canvas.width - (Math.floor(Math.random() * (10000 - 200 + 1)) + 180)) {
                 const randomObstacle = obstacleImages[Math.floor(Math.random() * obstacleImages.length)];
-                obstacles.push({ x: canvas.width, y: 280, width: 50, height: 50, img: randomObstacle });
+                obstacles.push({ x: canvas.width, y: 280, width: 45, height: 50, img: randomObstacle });
             }
 
             for (let i = 0; i < obstacles.length; i++) {
@@ -129,6 +137,7 @@
                     dino.y + dino.height > obstacles[i].y
                 ) {
                     gameOver = true;
+                    gameBGAudio.pause();
                     gameOverText.style.display = "block";
                     finalScoreText.textContent = score;
                     restartBtn.style.display = "block";
@@ -150,6 +159,7 @@
         }
 
         function gameLoop() {
+            gameBGAudio.play().catch(error => console.error("Background audio failed:", error));
             update();
             draw();
             if (!gameOver) requestAnimationFrame(gameLoop);
@@ -157,16 +167,18 @@
 
         restartBtn.addEventListener("click", () => {
             gameOver = false;
+            gameOverSound.play();
             dino.y = 200;
             dino.velocityY = 0;
             obstacles = [];
             score = 0;
-            gameSpeed = 5;
+            gameSpeed = 4;
             restartBtn.style.display = "none";
             gameOverText.style.display = "none";
             gameLoop();
         });
-
+        
+        
         gameLoop();
     </script>
 </body>
