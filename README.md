@@ -21,16 +21,6 @@ Mafia Hasina Game is a simple browser-based jumping game where the player contro
 3. Make sure the `img` folder contains the required images (`hasina.png`, `yunus.png`, `bg.jpg`).
 4. Open `index.html` in a browser to start the game.
 
-## File Structure
-```
-Mafia-Hasina-Game/
-│-- img/
-│   ├── hasina.png
-│   ├── yunus.png
-│   ├── bg.jpg
-│-- index.html
-```
-
 ## Technologies Used
 - HTML5
 - CSS3
@@ -47,4 +37,3 @@ This project is open-source and available for modification and distribution.
 
 ---
 **Enjoy the game!** 🎮
-
