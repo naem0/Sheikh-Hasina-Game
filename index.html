@@ -71,8 +71,8 @@
         const finalScoreText = document.getElementById("finalScore");
 
         function resizeCanvas() {
-            canvas.width = Math.min(window.innerWidth * 0.9, 800);
-            canvas.height = 300;
+            canvas.width = Math.min(window.innerWidth * 0.9, 1000);
+            canvas.height = 400;
         }
         window.addEventListener("resize", resizeCanvas);
         resizeCanvas();
@@ -87,7 +87,7 @@
         const dinoImg = loadImage("/img/hasina.png");
         const obstacleImages = ["img/yunus.png", "img/yunus.png", "img/yunus.png"].map(loadImage);
 
-        let dino = { x: 50, y: 200, width: 30, height: 50, velocityY: 0, gravity: 1.5, jumping: false };
+        let dino = { x: 50, y: 300, width: 30, height: 50, velocityY: 0, gravity: 1.5, jumping: false };
         let obstacles = [];
         let gameSpeed = 5;
         let score = 0;
@@ -110,14 +110,14 @@
 
             dino.y += dino.velocityY;
             dino.velocityY += dino.gravity;
-            if (dino.y > 200) {
-                dino.y = 200;
+            if (dino.y > 300) {
+                dino.y = 300;
                 dino.jumping = false;
             }
 
-            if (obstacles.length === 0 || obstacles[obstacles.length - 1].x < canvas.width - (Math.floor(Math.random() * (2000 - 200 + 1)) + 150)) {
+            if (obstacles.length === 0 || obstacles[obstacles.length - 1].x < canvas.width - (Math.floor(Math.random() * (3000 - 200 + 1)) + 150)) {
                 const randomObstacle = obstacleImages[Math.floor(Math.random() * obstacleImages.length)];
-                obstacles.push({ x: canvas.width, y: 200, width: 40, height: 40, img: randomObstacle });
+                obstacles.push({ x: canvas.width, y: 300, width: 40, height: 40, img: randomObstacle });
             }
 
             for (let i = 0; i < obstacles.length; i++) {
