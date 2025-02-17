@@ -85,9 +85,9 @@
         }
 
         const dinoImg = loadImage("/img/hasina.png");
-        const obstacleImages = ["img/yunus.png", "img/yunus.png", "img/yunus.png"].map(loadImage);
+        const obstacleImages = ["img/younus.png", "img/younus.png", "img/younus.png"].map(loadImage);
 
-        let dino = { x: 50, y: 300, width: 30, height: 50, velocityY: 0, gravity: 1.5, jumping: false };
+        let dino = { x: 50, y: 280, width: 30, height: 50, velocityY: 0, gravity: 1.5, jumping: false };
         let obstacles = [];
         let gameSpeed = 5;
         let score = 0;
@@ -110,14 +110,14 @@
 
             dino.y += dino.velocityY;
             dino.velocityY += dino.gravity;
-            if (dino.y > 300) {
-                dino.y = 300;
+            if (dino.y > 280) {
+                dino.y = 280;
                 dino.jumping = false;
             }
 
-            if (obstacles.length === 0 || obstacles[obstacles.length - 1].x < canvas.width - (Math.floor(Math.random() * (3000 - 200 + 1)) + 150)) {
+            if (obstacles.length === 0 || obstacles[obstacles.length - 1].x < canvas.width - (Math.floor(Math.random() * (4000 - 200 + 1)) + 180)) {
                 const randomObstacle = obstacleImages[Math.floor(Math.random() * obstacleImages.length)];
-                obstacles.push({ x: canvas.width, y: 300, width: 40, height: 40, img: randomObstacle });
+                obstacles.push({ x: canvas.width, y: 280, width: 50, height: 50, img: randomObstacle });
             }
 
             for (let i = 0; i < obstacles.length; i++) {
